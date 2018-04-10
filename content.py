@@ -24,13 +24,20 @@ def mean_squared_error(x, y, w):
         sum += (y[n] - _y[n]) ** 2
     return sum/y.shape[0]
 
+
 def design_matrix(x_train, M):
     '''
     :param x_train: ciag treningowy Nx1
     :param M: stopien wielomianu 0,1,2,...
     :return: funkcja wylicza Design Matrix Nx(M+1) dla wielomianu rzedu M
     '''
-    pass
+    # DesignMatrix = zeros matrix N x (M+1)
+    # N = x_train.shape[0]
+    design_m = np.zeros(shape=(x_train.shape[0], M + 1))
+    for n in range(x_train.shape[0]):
+        for m in range(M + 1):
+            design_m[n, m] = x_train[n] ** m
+    return design_m
 
 
 def least_squares(x_train, y_train, M):
