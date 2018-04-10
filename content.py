@@ -33,11 +33,11 @@ def design_matrix(x_train, M):
     '''
     # DesignMatrix = zeros matrix N x (M+1)
     # N = x_train.shape[0]
-    design_m = np.zeros(shape=(x_train.shape[0], M + 1))
+    fi = np.zeros(shape=(x_train.shape[0], M + 1))
     for n in range(x_train.shape[0]):
         for m in range(M + 1):
-            design_m[n, m] = x_train[n] ** m
-    return design_m
+            fi[n, m] = x_train[n] ** m
+    return fi
 
 
 def least_squares(x_train, y_train, M):
@@ -48,7 +48,10 @@ def least_squares(x_train, y_train, M):
     :return: funkcja zwraca krotke (w,err), gdzie w sa parametrami dopasowanego wielomianu, a err blad sredniokwadratowy
     dopasowania
     '''
-    pass
+    fi = design_matrix(x_train, M)
+    w = np.linalg.inv((np.transpose(fi) @ fi)) @ np.transpose(fi) @ y_train
+    err = mean_squared_error(x_train, y_train, w)
+    return w, err
 
 
 def regularized_least_squares(x_train, y_train, M, regularization_lambda):
