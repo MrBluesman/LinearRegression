@@ -80,7 +80,17 @@ def model_selection(x_train, y_train, x_val, y_val, M_values):
     tj. daje najmniejszy blad na ciagu walidacyjnym, train_err i val_err to bledy na sredniokwadratowe na ciagach treningowym
     i walidacyjnym
     '''
-    pass
+    w = 0
+    train_err = 0
+    val_err = np.inf
+    for m in M_values:
+        w_temp, train_err_temp = least_squares(x_train, y_train, m)
+        val_err_temp = mean_squared_error(x_val, y_val, w_temp)
+        if val_err_temp < val_err:
+            w = w_temp
+            train_err = train_err_temp
+            val_err = val_err_temp
+    return w, train_err, val_err
 
 
 def regularized_model_selection(x_train, y_train, x_val, y_val, M, lambda_values):
