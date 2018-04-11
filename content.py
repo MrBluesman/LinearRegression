@@ -22,7 +22,7 @@ def mean_squared_error(x, y, w):
     sum = 0
     for n in range(y.shape[0]):
         sum += (y[n] - _y[n]) ** 2
-    return sum/y.shape[0]
+    return float(sum/y.shape[0])
 
 
 def design_matrix(x_train, M):
@@ -105,4 +105,16 @@ def regularized_model_selection(x_train, y_train, x_val, y_val, M, lambda_values
     tj. daje najmniejszy blad na ciagu walidacyjnym. Wielomian dopasowany jest wg kryterium z regularyzacja. train_err i val_err to
     bledy na sredniokwadratowe na ciagach treningowym i walidacyjnym. regularization_lambda to najlepsza wartosc parametru regularyzacji
     '''
-    pass
+    w = 0
+    train_err = 0
+    val_err = np.inf
+    regularization_lambda = 0
+    for lambda_temp in lambda_values:
+        w_temp, train_err_temp = regularized_least_squares(x_train, y_train, M, lambda_temp)
+        val_err_temp = mean_squared_error(x_val, y_val, w_temp)
+        if val_err_temp < val_err:
+            w = w_temp
+            train_err = train_err_temp
+            val_err = val_err_temp
+            regularization_lambda = lambda_temp
+    return w, train_err, val_err, regularization_lambda
